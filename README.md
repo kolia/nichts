@@ -4,10 +4,12 @@ nothing nix nada niente
 # todo
 
 - map function keys
-- blue light filter  flux
-- touchpad  right click 
+- blue light filter flux
+- user kolia
+- global git settings 
+- touchpad right click 
 - trackpad
-- tmux  with settings
+- tmux with settings
 - alacritty font size
 - test sound
 - test microphone
