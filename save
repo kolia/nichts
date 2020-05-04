@@ -6,7 +6,7 @@ for file in [ redshift.conf ]
    cp {~/,home/}.config/$file
 end
 
-for folder in [ i3 i3status ]
+for folder in [ i3 i3status ion ]
    rsync -av {~/,home/}.config/$folder/
 end
 

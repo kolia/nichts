@@ -1,0 +1,15 @@
+
+# The PROMPT function is called whenever a prompt needs to be drawn. Docs: https://doc.redox-os.org/ion-manual/html/misc/06-prompt_fn.html
+fn PROMPT
+    # Save the status immediately, since the status is also updated after variable assignment, etc.
+    let STARSHIP_ION_STATUS = $?
+
+    # The STARSHIP between the colons will be replaced with the actual path to the starship executable.
+    # The jobs command outputs to stderr, therefore we need to pipe stderr to `wc -l`.
+    "/nix/store/0nyh6ykb4cm9zdflv9k2wsgq91w9lkna-starship-0.35.1/bin/starship" prompt --status $STARSHIP_ION_STATUS --jobs $(jobs ^| wc -l)
+end
+
+# Export the correct name of the shell
+export STARSHIP_SHELL="ion"
+
+

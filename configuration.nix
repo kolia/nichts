@@ -14,12 +14,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # boot.extraModprobeConfig = ''
-  #   options snd slots=snd-hda-intel
-  # '';
-
-  # boot.blacklistedKernelModules = [ "snd_pcsp" ];
-
   networking.hostName = "nichts"; # Define your hostname.
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -85,9 +79,7 @@
     # support32Bit = true;
     extraConfig = ''
       # Automatically switch to newly connected devices.
-      # load-module module-switch-on-connect
-      # Discover Apple iTunes devices on network.
-      # load-module module-raop-discover
+      load-module module-switch-on-connect
     '';
     zeroconf.discovery.enable = true;
     
@@ -141,18 +133,6 @@
       TERMINAL = "alacritty";
       SHELL = "ion";
     };
-
-    # etc."X11/xorg.conf.d/20-intel.conf" = {
-    #   text = ''
-    #     Section "Device"
-    #     Identifier "Intel Graphics"
-    #     Driver "intel"
-    #     Option "TearFree" "true"
-    #     Option "AccelMethod" "uxa"
-    #     Option "SwapbuffersWait" "true"
-    #     EndSection
-    #   '';
-    # };
   };
 
   services = {
