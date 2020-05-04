@@ -1,6 +1,12 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ion
 
 cp /etc/nixos/configuration.nix configuration.nix
-cp {~/,home/}.config/redshift.conf
-rsync -av {~/,home/}.config/{i3,i3status}/
+
+for file in [ redshift.conf ]
+   cp {~/,home/}.config/$file
+end
+
+for folder in [ i3 i3status ]
+   rsync -av {~/,home/}.config/$folder/
+end
 

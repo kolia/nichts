@@ -119,6 +119,7 @@
       kakoune
       chromium
       git
+      rsync
       alacritty
       ion
       starship
