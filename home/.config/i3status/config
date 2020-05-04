@@ -1,0 +1,90 @@
+general {
+        colors = true
+        markup = "pango"
+        interval = 5
+        color_good = "#2AA198"
+        color_bad = "#586E75"
+        color_degraded = "#DC322F"
+        color_separator = "#888888"
+}
+
+order += "volume master"
+order += "disk /"
+order += "cpu_usage"
+order += "cpu_temperature"
+order += "memory"
+order += "wireless wlp108s0"
+order += "battery all"
+order += "tztime local"
+
+
+memory {
+    format = " %used / %total "
+    threshold_degraded = "10%"
+    threshold_critical = "5%"
+    format_degraded = "Memory LOW: %free"
+}
+
+cpu_usage {
+    format = "CPU: %usage"
+    min_width = "CPU: 100%"
+    align = left
+}
+
+cpu_temperature 0 {
+    format = "T: %degrees°C"
+    path = "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp1_input"
+    max_threshold = 76
+}
+
+volume master {
+    format = "♪ %volume"
+    #format = "🔊 %volume"
+    format_muted = "🔇 0%%"
+    device = "sysdefault"
+    mixer = "Master"
+    mixer_idx = 0
+}
+
+disk "/" {
+        #format = " ⛁ %avail "
+        format = " %avail "
+}
+
+wireless wlp108s0 {
+    format_up = "W: (%quality at %essid, %bitrate) %ip"
+    format_down = "W: down"
+    color_degraded = "#1793d0"  # blue, the same as color_good to override color switching
+    color_bad = "#888888"
+}
+
+battery all {
+        format = "%status %percentage %remaining %emptytime"
+        #format = " %status %percentage"
+        format_down = "No battery"
+        last_full_capacity = true
+        integer_battery_capacity = true
+        # status_chr = ""
+        status_chr = "⚡"
+        # status_bat = "bat"
+        # status_bat = "☉"
+        status_bat = "⚡"
+        # status_unk = "?"
+        status_unk = ""
+        # status_full = ""
+        status_full = "⚡"
+        low_threshold = 15
+        threshold_type = time
+}
+
+#memory {
+#        format = "%used | %available"
+#        threshold_degraded = "1G"
+#        format_degraded = "MEMORY < %available"
+#}
+
+tztime local {
+        format = "%a %d %B %Y %H:%M:%S"
+        #format = "%Y-%m-%d %H:%M:%S"
+        # format = " %d.%m. %H:%M "
+}

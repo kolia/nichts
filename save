@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+cp /etc/nixos/configuration.nix configuration.nix
+cp {~/,home/}.config/redshift.conf
+rsync -av {~/,home/}.config/{i3,i3status}/
+

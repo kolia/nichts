@@ -3,18 +3,22 @@ nothing nix nada niente
 
 # todo
 
-- map function keys
-- blue light filter flux
-- user kolia
-- global git settings 
-- touchpad right click 
-- trackpad
-- tmux with settings
-- alacritty font size
-- test sound
-- test microphone
-- test google hangouts
-- xset key repeat speed
-- zoxide + prompt for ion
-- test external monitor
-- cell network modem?
+- [ ] map function keys
+  - [X] volume
+  - [X] speaker mute
+  - [X] brightness
+  - [ ] mic mute
+- [X] blue light filter redshift
+- [X] user kolia
+- [X] global git settings 
+- [ ] touchpad right click 
+- [X] trackpad
+- [ ] tmux with settings
+- [ ] alacritty font size
+- [X] test sound
+- [ ] test microphone
+- [ ] test google hangouts
+- [X] xset key repeat speed
+- [ ] zoxide + prompt for ion
+- [X] test external monitor
+- [ ] cell network modem?
