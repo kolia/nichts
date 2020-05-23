@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, callPackage, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -10,8 +10,11 @@
       ./hardware-configuration.nix
     ];
 
+  nixpkgs.config.allowUnfree = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nichts"; # Define your hostname.
@@ -28,20 +31,25 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_CA.UTF-8";
   console = {
     earlySetup = true;
-    font = "ter-i32b";
+    font = "ter-i22b";
     keyMap = "us";
     packages = with pkgs; [
       terminus_font
     ];
   };
 
-  fonts.fontconfig.dpi = 180;
+  fonts.fontconfig.dpi = 100;
+
+  fonts.fonts = with pkgs; [
+    powerline-fonts
+    font-awesome
+  ];
 
   # Set your time zone.
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Montreal";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -60,6 +68,8 @@
 
   # List services that you want to enable:
 
+  programs.ssh.startAgent = true;
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
@@ -71,6 +81,8 @@
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
+
+  hardware.bluetooth.enable = true;
 
   # Enable sound.
   sound.enable = true;
@@ -109,23 +121,37 @@
   environment = {
     systemPackages = with pkgs; [
       kakoune
+      atom
+      julia_11
       chromium
       git
       rsync
       alacritty
       ion
+      slack-dark
       starship
       redshift
       bc
+      networkmanager
       tmux
-      libinput
       clipmenu
-      xorg.xev
-      inxi
       procs
       exa
       ripgrep
       skim
+      bat
+      fd
+      ytop
+      dust
+      i3status-rust
+
+      # only for setting up / diagnostics
+      xorg.xev
+      mesa
+      libinput
+      pciutils
+      inxi
+      glxinfo
     ];
 
     variables = {
@@ -140,6 +166,8 @@
       enable = true;
       autorun = true;
 
+      videoDrivers = lib.mkForce [ "modesetting" ];
+
       libinput = {
         enable = true;
         naturalScrolling = true;
@@ -153,11 +181,16 @@
       };
 
       displayManager.lightdm.enable = true;
+      # displayManager.lightdm.autoLogin.enable = true;
+      # displayManager.lightdm.autoLogin.user = "kolia";
+      displayManager.lightdm.extraConfig = ''
+        logind-check-graphical = true
+      '';
 
       windowManager.i3 = {
         enable = true;
         extraPackages = with pkgs; [
-          i3status
+          i3lock
           rofi
         ];
       };

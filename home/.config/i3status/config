@@ -48,7 +48,7 @@ volume master {
 
 disk "/" {
         #format = " ⛁ %avail "
-        format = " %avail "
+        format = " %avail avail"
 }
 
 wireless wlp108s0 {

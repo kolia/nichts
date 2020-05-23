@@ -12,4 +12,4 @@ end
 # Export the correct name of the shell
 export STARSHIP_SHELL="ion"
 
-
+alias k = 'kak -c global'
