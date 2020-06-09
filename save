@@ -1,17 +1,17 @@
-#!/usr/bin/env ion
+#!/usr/bin/env fish
 
 cp /etc/nixos/configuration.nix configuration.nix
 
-for file in [ redshift.conf ]
-   cp {~/,home/}.config/$file
+for file in redshift.conf
+   cp {$HOME/,home/}.config/$file
 end
 
-for file in [ .tmux.conf .gitconfig ]
-   cp {~/,home/}$file
+for file in .tmux.conf .gitconfig
+   cp {$HOME/,home/}$file
 end
 
-for folder in [ i3 i3status ion ]
-   rsync -av {~/,home/}.config/$folder/
+for folder in i3 i3status kak fish
+   rsync -av {$HOME/,home/}.config/$folder/
 end
 
 

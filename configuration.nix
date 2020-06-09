@@ -4,13 +4,25 @@
 
 { config, pkgs, lib, ... }:
 
+let
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -70,6 +82,10 @@
 
   programs.ssh.startAgent = true;
 
+  # programs.tmux.extraConfig = ''
+  #   run-shell ${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank/yank.tmux   
+  # '';
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
@@ -121,20 +137,42 @@
   environment = {
     systemPackages = with pkgs; [
       kakoune
+      kak-lsp
+      vim
+      gcc
+      llvmPackages.bintools
+      cargo
+
+      # map caps to esc
+      xorg.xmodmap
+      
+      unstable.flutter
+      unstable.androidStudioPackages.canary
+
+      # android emulator dependencies
+      xorg.libXext
+      xorg.libXtst
+      xorg.libXrender
+      xorg.libXi
+
+      fish
+      
       atom
       julia_11
       chromium
       git
       rsync
-      alacritty
-      ion
+      sakura
       slack-dark
-      starship
       redshift
       bc
       networkmanager
+      
       tmux
+
+      xsel
       clipmenu
+      
       procs
       exa
       ripgrep
@@ -156,8 +194,8 @@
 
     variables = {
       EDITOR = "kak";
-      TERMINAL = "alacritty";
-      SHELL = "ion";
+      TERMINAL = "sakura";
+      SHELL = "fish";
     };
   };
 
@@ -168,21 +206,28 @@
 
       videoDrivers = lib.mkForce [ "modesetting" ];
 
-      libinput = {
+      synaptics = {
         enable = true;
-        naturalScrolling = true;
-        middleEmulation = true;
-        clickMethod = "clickfinger";
-        tapping = true;
+        dev = "/dev/input/event*";
+        twoFingerScroll = true;
+        tapButtons = false;
+        # accelFactor = "0.0005";
+        buttonsMap = [ 1 3 2 ];
+        palmDetect = true;
+        additionalOptions = ''
+          Option "VertScrollDelta" "-50" # scroll sensitivity, the bigger the negative number = less sensitive
+          Option "HorizScrollDelta" "-50"
+          Option "FingerLow" "40"
+          Option "FingerHigh" "70"
+          Option "Resolution" "60" # Pointer sensitivity
+        '';
       };
-
+      
       desktopManager = {
         xterm.enable = false;
       };
 
       displayManager.lightdm.enable = true;
-      # displayManager.lightdm.autoLogin.enable = true;
-      # displayManager.lightdm.autoLogin.user = "kolia";
       displayManager.lightdm.extraConfig = ''
         logind-check-graphical = true
       '';
@@ -197,7 +242,7 @@
     };
   };
 
-  users.defaultUserShell = pkgs.ion;
+  users.defaultUserShell = pkgs.fish;
 
   users.users.kolia = {
     isNormalUser = true;
@@ -212,7 +257,7 @@
       "wheel"                           # Access sudo command
     ];
     uid = 1000;
-    shell = pkgs.ion;                  # Use ion as the default shell
+    shell = pkgs.fish;                  # Use ion as the default shell
   };
 
 
