@@ -4,10 +4,22 @@
 
 { config, pkgs, lib, ... }:
 
+with pkgs;
 let
   unstableTarball =
     fetchTarball
       https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
+in
+let
+  neighborhood-python-packages = python-packages: with python-packages; [
+    pytest
+    flask
+    flask-sockets
+    gunicorn
+    requests
+    websocket_client
+  ]; 
+  python-with-neighborhood-packages = python37.withPackages neighborhood-python-packages;
 in
 {
   imports =
@@ -31,7 +43,12 @@ in
 
   networking.hostName = "nichts"; # Define your hostname.
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.nameservers = ["208.67.222.222" "8.8.8.8" "208.67.220.220"];
 
+
+  # networking.networkmanager.enable = true;
+  # networking.networkmanager.insertNameservers = ["8.8.8.8"];
+  
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
@@ -100,6 +117,8 @@ in
 
   hardware.bluetooth.enable = true;
 
+  hardware.facetimehd.enable = true;
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio = {
@@ -145,21 +164,33 @@ in
 
       # map caps to esc
       xorg.xmodmap
-      
+
+
+      # our neighborhood app;  TODO isolate in its own env
       unstable.flutter
       unstable.androidStudioPackages.canary
-
+      google-cloud-sdk
+      python-with-neighborhood-packages
+      #python37Full
+      #python37Packages.pytest
+      #python37Packages.flask
+      #python37Packages.flask-sockets
+      #python37Packages.gunicorn
+      #python37Packages.requests
       # android emulator dependencies
       xorg.libXext
       xorg.libXtst
       xorg.libXrender
       xorg.libXi
 
+
       fish
-      
+
+      zotero
       atom
       julia_11
       chromium
+      firefox
       git
       rsync
       sakura
@@ -167,11 +198,14 @@ in
       redshift
       bc
       networkmanager
+      unzip
       
       tmux
 
       xsel
       clipmenu
+      imagemagick7
+      obs-studio
       
       procs
       exa
@@ -179,7 +213,6 @@ in
       skim
       bat
       fd
-      ytop
       dust
       i3status-rust
 

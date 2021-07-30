@@ -1,32 +1,49 @@
+set global indentwidth 3
+
+# https://github.com/tkf/JuliaCLI.jl
+# nop %sh{ { nohup jlfmt-serve } > /dev/null 2>&1 < /dev/null & }
+
 declare-user-mode paragraph
-map global paragraph <ret> '<s-l>:send-text<ret>w<a-a>p<a-s-b><a-s-w>' -docstring 'send-text'
-map global paragraph k '<a-;>b<a-a>p<a-s-b><a-s-w>' -docstring 'select previous'
+map global paragraph <ret> ':send-text<ret>w<a-a>pBF<ret>' -docstring 'send-text'
+map global paragraph k '<a-;>b<a-a>pBF<ret>' -docstring 'select previous'
 map global paragraph <s-k> '<a-;>{p<a-;>' -docstring 'extend to previous'
-map global paragraph i '<c-o>' -docstring 'tree parent'
-map global paragraph j 'w<a-a>p<a-s-b><a-s-w>' -docstring 'select next'
-map global paragraph <s-j> '<s-w>}p<a-s-b><a-s-w>' -docstring 'extend to next'
-map global paragraph m '<space>:tree-select-children<ret><c-s>' -docstring 'tree split'
+map global paragraph u '<c-o>' -docstring 'tree parent'
+map global paragraph j 'w<a-a>pBF<ret>' -docstring 'select next'
+map global paragraph <s-j> '<s-w>}pBF<ret>' -docstring 'extend to next'
+map global paragraph m '<space>:tree-select-children<ret><a-K>\A\W\z<ret><c-s>' -docstring 'tree split'
 map global paragraph h '(<c-s>' -docstring 'tree previous sibling'
 map global paragraph l ')<c-s>' -docstring 'tree next sibling'
+map global paragraph f '|jlfmt<ret>' -docstring 'format'
 map global paragraph <space> '<space>' -docstring 'tree next sibling'
 
-# map global paragraph m '<space>:tree-select-children<ret><c-s><space>' -docstring 'tree split'
-# map global paragraph h '<c-o>(<c-s><space>' -docstring 'tree previous sibling'
-# map global paragraph l '<c-o>)<c-s><space>' -docstring 'tree next sibling'
-
-map global normal <space> '<a-a>p<a-s-b><a-s-w>:enter-user-mode<space>-lock<space>paragraph<ret>'
+map global normal <space> '<a-a>pBF<ret>:enter-user-mode<space>-lock<space>paragraph<ret>'
 
 map global normal , <space> -docstring 'collapse selection to cursor'
 map global normal <ret> ':send-text'
 
-# map global paragraph h ': enter-user-mode<space>-lock<space>tree<ret>' -docstring 'tree mode'
-# declare-user-mode tree
-# map global tree <ret> '<s-l>:send-text<ret>' -docstring 'send-text'
-# map global tree k ': tree-select-previous-node<ret>' -docstring 'select previous'
-# map global tree j ': tree-select-next-node<ret>' -docstring 'select next'
-# map global tree l ': tree-select-parent-node<ret>' -docstring 'select parent'
-# map global tree f ': tree-select-children<ret>' -docstring 'select children'
-# map global tree h ': tree-select-first-child<ret>' -docstring 'select first child'
-# map global tree s ': tree-node-sexp<ret>' -docstring 'show info'
-# map global tree P '!xsel --output --clipboard<ret>' -docstring 'paste before'
-# map global tree p '<a-!>xsel --output --clipboard<ret>' -docstring 'paste after'
+# (un-)indent with <tab>
+map global insert <tab> '.<a-;><gt><backspace>'
+map global insert <s-tab> '<a-;><lt>'
+
+# <tab> cycles through completions when completion menu is shown
+hook global InsertCompletionShow .* %{
+    try %{
+        # this command temporarily removes cursors preceded by whitespace;
+        # if there are no cursors left, it raises an error, does not
+        # continue to execute the mapping commands, and the error is eaten
+        # by the `try` command so no warning appears.
+        execute-keys -draft 'b<a-K>end|\h<ret>'
+        map window insert <tab> <c-n>
+        map window insert <s-tab> <c-p>
+    }
+}
+hook global InsertCompletionHide .* %{
+    unmap window insert <tab> <c-n>
+    unmap window insert <s-tab> <c-p>
+}
+
+add-highlighter global/ number-lines -relative -separator '   ' -hlcursor
+
+add-highlighter global/ show-matching
+
+# hook InsertChar \n %{ exec -draft k<a-x> s^\h+<ret>y j<a-h>P }
