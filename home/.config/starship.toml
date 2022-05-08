@@ -1,5 +1,5 @@
 [shell]
-fish_indicator = "🐬"
+fish_indicator = ""
 zsh_indicator = "Z"
 bash_indicator = ""
 disabled = false
