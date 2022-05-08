@@ -30,7 +30,7 @@ exec --no-startup-id xset r rate 300 42
 #exec --no-startup-id xset 420 120 && xss-lock -n redshift -o -P -b 0.2 -- slock -n
 
 exec --no-startup-id exec xrandr | grep 'HDMI-1 connected' || xrandr --output eDP-1 --mode 3840x2160 --scale 0.5x0.5
-exec --no-startup-id exec xrandr | grep 'HDMI-1 connected' && xrandr --output eDP-1 --mode 3840x2160 --scale 0.5x0.5 --output HDMI-1 --mode 3840x2160 --above eDP-1
+#exec --no-startup-id exec xrandr | grep 'HDMI-1 connected' && xrandr --output eDP-1 --mode 3840x2160 --scale 0.5x0.5 --output HDMI-1 --mode 3840x2160 --above eDP-1
 
 exec --no-startup-id xautolock -time 3 -locker i3lock
 
@@ -40,8 +40,8 @@ exec --no-startup-id kak -d -s global
 bindsym $mod+c exec "CM_ONESHOT=1 clipmenud"
 bindsym $mod+v exec clipmenu
 
-bindsym XF86MonBrightnessUp exec redshift -o -P -b $(echo "$(xrandr --verbose |grep Brightness |grep -o '[0-9].*' | head -n 1)+0.1" | bc) 
-bindsym XF86MonBrightnessDown exec redshift -o -P -b $(echo "$(xrandr --verbose |grep Brightness |grep -o '[0-9].*' | head -n 1)-0.01" | bc) 
+#bindsym XF86MonBrightnessUp exec redshift -o -P -b $(echo "$(xrandr --verbose |grep Brightness |grep -o '[0-9].*' | head -n 1)+0.1" | bc) 
+#bindsym XF86MonBrightnessDown exec redshift -o -P -b $(echo "$(xrandr --verbose |grep Brightness |grep -o '[0-9].*' | head -n 1)-0.01" | bc) 
 
 
 
@@ -51,11 +51,11 @@ bindsym XF86MonBrightnessDown exec redshift -o -P -b $(echo "$(xrandr --verbose 
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status-rs

@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-cp /etc/nixos/configuration.nix configuration.nix
+pacman -Qqe | grep -v "$(pacman -Qqm)" > pacman.lst
 
 for file in redshift.conf
    cp {$HOME/,home/}.config/$file
@@ -10,7 +10,7 @@ for file in .tmux.conf .gitconfig
    cp {$HOME/,home/}$file
 end
 
-for folder in i3 i3status kak fish
+for folder in i3 kak fish
    rsync -av {$HOME/,home/}.config/$folder/
 end
 
