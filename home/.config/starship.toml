@@ -1,0 +1,21 @@
+[shell]
+fish_indicator = "🐬"
+zsh_indicator = "Z"
+bash_indicator = ""
+disabled = false
+
+[kubernetes]
+disabled = false
+
+[git_status]
+style= "bold cyan"
+ahead = "↑${count}"
+diverged = "↑${ahead_count}↓${behind_count}"
+behind = "↓${count}"
+conflicted = "✖${count}(red)"
+untracked = "[…‍$count](244)"
+modified = "✚${count}(bold blue)"
+staged = "[●$count](bold bright-yellow)"
+renamed = "»(green)"
+deleted = "✘(red)"
+

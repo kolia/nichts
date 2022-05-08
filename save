@@ -2,7 +2,7 @@
 
 pacman -Qqe | grep -v "$(pacman -Qqm)" > pacman.lst
 
-for file in redshift.conf
+for file in redshift.conf starship.toml
    cp {$HOME/,home/}.config/$file
 end
 
